@@ -46,7 +46,7 @@ function fail(msg) {
 function setOutput(name, value) {
   const out = process.env.GITHUB_OUTPUT;
   if (!out) return;
-  fs.appendFileSync(out, `\( {name}= \){value}\n`);
+  fs.appendFileSync(out, `${name}=${value}\n`);
 }
 
 function resolveRepo() {
@@ -106,7 +106,7 @@ function buildOverviewPayload(repo) {
   const points = normalizeOverview ? normalizePoints(raw) : raw;
 
   console.log(
-    `Overview raw: stars=\( {raw[0]} forks= \){raw[1]} watchers=\( {raw[2]} issues= \){raw[3]} (normalize=${normalizeOverview})`
+    `Overview raw: stars=${raw[0]} forks=${raw[1]} watchers=${raw[2]} issues=${raw[3]} (normalize=${normalizeOverview})`
   );
 
   const payload = {
@@ -210,11 +210,11 @@ async function main() {
   if (!apiKey) fail("Missing api-key / PROVCHART_API_KEY");
 
   const { owner, name } = resolveRepo();
-  console.log(`Repo: \( {owner}/ \){name}`);
+  console.log(`Repo: ${owner}/${name}`);
 
-  const repo = await ghJson(`https://api.github.com/repos/\( {owner}/ \){name}`);
+  const repo = await ghJson(`https://api.github.com/repos/${owner}/${name}`);
   const languages = await ghJson(
-    `https://api.github.com/repos/\( {owner}/ \){name}/languages`
+    `https://api.github.com/repos/${owner}/${name}/languages`
   );
 
   const jobs = [];
@@ -233,7 +233,7 @@ async function main() {
 
   for (const payload of jobs) {
     const outPath = path.join(outputDir, payload.file);
-    console.log(`Generating \( {outPath} ( \){payload.type})…`);
+    console.log(`Generating ${outPath} (${payload.type})…`);
     try {
       const svg = await generateSvg(payload);
       fs.writeFileSync(outPath, svg, "utf8");
