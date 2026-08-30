@@ -15,12 +15,15 @@ const chartsList = (process.env.INPUT_CHARTS || "overview,languages")
   .split(",")
   .map((s) => s.trim().toLowerCase())
   .filter(Boolean);
-const overviewType = process.env.INPUT_OVERVIEW_TYPE || "hbar";
+const overviewType = process.env.INPUT_OVERVIEW_TYPE || "area";
 const languagesType = process.env.INPUT_LANGUAGES_TYPE || "hbar";
 const languageLimit = Math.max(
   1,
   parseInt(process.env.INPUT_LANGUAGE_LIMIT || "8", 10) || 8
 );
+const normalizeOverview =
+  String(process.env.INPUT_NORMALIZE_OVERVIEW || "false").toLowerCase() ===
+  "true";
 const apiBase = (
   process.env.INPUT_API_BASE || "https://provchart-api.devtem.org"
 ).replace(/\/$/, "");
@@ -29,9 +32,6 @@ const heightOverview =
   parseInt(process.env.INPUT_HEIGHT_OVERVIEW || "280", 10) || 280;
 const heightLanguages =
   parseInt(process.env.INPUT_HEIGHT_LANGUAGES || "300", 10) || 300;
-const normalizeOverview =
-  String(process.env.INPUT_NORMALIZE_OVERVIEW || "true").toLowerCase() !==
-  "false";
 
 const COLORS = {
   primary: "#8b7bff",
@@ -46,7 +46,7 @@ function fail(msg) {
 function setOutput(name, value) {
   const out = process.env.GITHUB_OUTPUT;
   if (!out) return;
-  fs.appendFileSync(out, `${name}=${value}\n`);
+  fs.appendFileSync(out, `\( {name}= \){value}\n`);
 }
 
 function resolveRepo() {
@@ -87,7 +87,7 @@ async function ghJson(url) {
   return data;
 }
 
-/** Map values to \~0–100 so one huge metric does not crush the others */
+/** Relative 0–100 scale (only when normalize-overview is true) */
 function normalizePoints(values) {
   const nums = values.map((v) => Math.max(0, Number(v) || 0));
   const max = Math.max(...nums, 1);
@@ -129,6 +129,7 @@ function buildOverviewPayload(repo) {
     payload.min = 0;
     payload.max = 100;
   }
+  // else: omit min/max so ProvChart auto-scales real counts
 
   return payload;
 }
