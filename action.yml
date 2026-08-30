@@ -1,0 +1,74 @@
+name: ProvChart Repo Stats
+description: >-
+  Generate ProvChart SVG charts from GitHub repo stats
+  (stars, forks, watchers, issues, languages). Default chart type: hbar.
+author: DevTemple
+
+branding:
+  icon: bar-chart-2
+  color: purple
+
+inputs:
+  api-key:
+    description: ProvChart API key (X-API-Key)
+    required: true
+  token:
+    description: GitHub token for repo metadata (default GITHUB_TOKEN)
+    required: false
+    default: ${{ github.token }}
+  repo:
+    description: owner/name (default = current repository)
+    required: false
+    default: ""
+  output-dir:
+    description: Directory for written SVG files
+    required: false
+    default: docs/charts
+  theme:
+    description: ProvChart theme (midnight, dark, light)
+    required: false
+    default: midnight
+  charts:
+    description: "Comma list - overview, languages"
+    required: false
+    default: overview,languages
+  overview-type:
+    description: Chart type for overview (hbar recommended)
+    required: false
+    default: hbar
+  languages-type:
+    description: Chart type for languages (hbar recommended)
+    required: false
+    default: hbar
+  language-limit:
+    description: Max languages to include
+    required: false
+    default: "8"
+  api-base:
+    description: ProvChart API base URL
+    required: false
+    default: https://provchart-api.devtem.org
+  width:
+    description: SVG width
+    required: false
+    default: "640"
+  height-overview:
+    description: SVG height for overview chart
+    required: false
+    default: "280"
+  height-languages:
+    description: SVG height for languages chart
+    required: false
+    default: "300"
+  normalize-overview:
+    description: "If true, scale overview bars to 0–100 relative to max metric"
+    required: false
+    default: "true"
+
+outputs:
+  files:
+    description: Comma-separated list of written SVG paths
+
+runs:
+  using: node24
+  main: src/main.js
