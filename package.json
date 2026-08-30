@@ -1,0 +1,8 @@
+{
+  "name": "provchart-repo-stats",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GitHub Action — repo health → ProvChart SVG (hbar default)",
+  "type": "module",
+  "license": "MIT"
+}
