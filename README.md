@@ -1,2 +1,1 @@
-# provchart-repo-stats
-Generate ProvChart SVG charts from GitHub repo stats (stars, forks, watchers, issues, languages)
+Read live repository health from the GitHub API, map it into ProvChart payloads, and write SVG files you can embed in the README with a normal image tag. No hand-maintained JSON for basic stats. Horizontal bar charts by default.
