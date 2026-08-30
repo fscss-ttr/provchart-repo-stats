@@ -2,7 +2,6 @@ name: ProvChart Repo Stats
 description: >-
   Generate ProvChart SVG charts from GitHub repo stats
   (stars, forks, watchers, issues, languages).
-  Overview defaults to area with real counts; languages default to hbar.
 author: DevTemple
 
 branding:
